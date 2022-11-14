@@ -97,13 +97,13 @@ public class JavaGameClientView extends JFrame {
 
 	// 버튼에 이미지 넣기
 	private JButton quitButton = new JButton(quitButtonBasicImage);
-	
-	
-	//로비 창 선언 
+
+	// 로비 창 선언
 	public JLabel myInfo = new JLabel();
 	public JLabel lobyInfototal = new JLabel();
 	public JLabel lobyInfo = new JLabel();
 	public JButton Room[] = new JButton[4];
+
 	/**
 	 * Create the frame.
 	 * 
@@ -112,8 +112,6 @@ public class JavaGameClientView extends JFrame {
 	// 게임 창 ----------------------------------------------------------
 	public JavaGameClientView(String username, String ip_addr, String port_no) {
 
-		
-		
 		setUndecorated(true); // 위에 창을 없애준
 		setTitle("Catch Mind");
 		setSize(1280, 720); // 게임 화면 크기
@@ -130,31 +128,31 @@ public class JavaGameClientView extends JFrame {
 		// contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// setContentPane(contentPane);
 		// contentPane.setLayout(null);
-		
-		//lobby
+
+		// lobby
 ////////////LobyButton From Here
-	////////////
-	////////////
-		myInfo.setBounds(900,42,300,50);
+		////////////
+		////////////
+		myInfo.setBounds(900, 42, 300, 50);
 		myInfo.setVisible(true);
-		myInfo.setFont(new Font("굴림체",Font.BOLD,40));
+		myInfo.setFont(new Font("굴림체", Font.BOLD, 40));
 		myInfo.setForeground(Color.BLACK);
 		myInfo.setText(username);
 		this.add(myInfo);
-		
-	lobyInfo.setVisible(true);
-	lobyInfo.setText("?");
-	lobyInfo.setBounds(600,70,1000,30);
-	lobyInfo.setFont(new Font("굴림체",Font.BOLD,30));
-	lobyInfo.setForeground(Color.BLACK);
-	this.add(lobyInfo);
-	
-	lobyInfototal.setVisible(true);
-	lobyInfototal.setText("?");
-	lobyInfototal.setBounds(600,20,100,30);
-	lobyInfototal.setFont(new Font("굴림체",Font.BOLD,30));
-	lobyInfototal.setForeground(Color.BLACK);
-	this.add(lobyInfototal);
+
+		lobyInfo.setVisible(true);
+		lobyInfo.setText("?");
+		lobyInfo.setBounds(600, 70, 1000, 30);
+		lobyInfo.setFont(new Font("굴림체", Font.BOLD, 30));
+		lobyInfo.setForeground(Color.BLACK);
+		this.add(lobyInfo);
+
+		lobyInfototal.setVisible(true);
+		lobyInfototal.setText("?");
+		lobyInfototal.setBounds(600, 20, 100, 30);
+		lobyInfototal.setFont(new Font("굴림체", Font.BOLD, 30));
+		lobyInfototal.setForeground(Color.BLACK);
+		this.add(lobyInfototal);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(880, 120, 400, 550); // 채팅창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -166,8 +164,8 @@ public class JavaGameClientView extends JFrame {
 		textArea.setEditable(true);
 		textArea.setFont(new Font("굴림체", Font.PLAIN, 14));
 		scrollPane.setViewportView(textArea);
-		
-		//textArea
+
+		// textArea
 
 		txtInput = new JTextField();
 		txtInput.setBounds(940, 670, 220, 40); // 채팅창 입력 하는 곳!!!!!!!!!!!!!!!!!!!
@@ -225,23 +223,23 @@ public class JavaGameClientView extends JFrame {
 		add(quitButton);
 
 		// -- 종료 버튼
-		
-	//// 색깔 바꾸기 버튼
-			JButton infoButton = new JButton("정보");
-			infoButton.setFont(new Font("굴림", Font.PLAIN, 8));
-			infoButton.setBounds(200, 639, 50, 50);
-			infoButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					// 색깔 바꾸기
-					// gc2.setColor(Color.RED);
-					
-					refreshInfo();
-				}
-			});
-			// contentPane.add(btnNewButton2);
-			infoButton.setVisible(true);
-			add(infoButton);
-			// -----------------------색깔 바꾸기 버튼
+
+		//// 색깔 바꾸기 버튼
+		JButton infoButton = new JButton("정보");
+		infoButton.setFont(new Font("굴림", Font.PLAIN, 8));
+		infoButton.setBounds(200, 639, 50, 50);
+		infoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// 색깔 바꾸기
+				// gc2.setColor(Color.RED);
+
+				refreshInfo();
+			}
+		});
+		// contentPane.add(btnNewButton2);
+		infoButton.setVisible(true);
+		add(infoButton);
+		// -----------------------색깔 바꾸기 버튼
 
 		//// 색깔 바꾸기 버튼
 		JButton btnNewButton2 = new JButton("레드");
@@ -294,7 +292,7 @@ public class JavaGameClientView extends JFrame {
 			}
 		});
 		// contentPane.add(btnNewButton4);
-		//btnNewButton4.setVisible(true);
+		// btnNewButton4.setVisible(true);
 		add(btnNewButton4);
 		// -----------------------색깔 바꾸기 버튼 끝
 
@@ -303,7 +301,7 @@ public class JavaGameClientView extends JFrame {
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(25, 146, 550, 490);
 		// contentPane.add(panel);
-		//panel.setVisible(false);
+		// panel.setVisible(false);
 		add(panel);
 		gc = panel.getGraphics();
 
@@ -323,8 +321,7 @@ public class JavaGameClientView extends JFrame {
 		lblMouseEvent.setBounds(376, 539, 400, 40); ////// 휠의 위치 알려주는 판 !!!!!!!!
 		// contentPane.add(lblMouseEvent);
 		// add(lblMouseEvent);
-		
-		
+
 		try {
 			socket = new Socket(ip_addr, Integer.parseInt(port_no));
 //			is = socket.getInputStream();
@@ -367,7 +364,7 @@ public class JavaGameClientView extends JFrame {
 	public void refreshInfo() {
 		SendInfoReq("/lc");
 	}
-	
+
 	public void paint(Graphics g) { // gui ,, jframe에서 가장 먼저 그려주는 함수
 //		super.paint(g);
 
@@ -375,16 +372,14 @@ public class JavaGameClientView extends JFrame {
 		// g.drawImage(GameBackgroundImage, 0, 0, null);
 
 		// Image 영역이 가려졌다 다시 나타날 때 그려준다.
-		//screenImage = createImage(1280, 720); // 판생성
-		//screenGraphic = screenImage.getGraphics(); // 판에 그래픽객체 얻어오기
+		// screenImage = createImage(1280, 720); // 판생성
+		// screenGraphic = screenImage.getGraphics(); // 판에 그래픽객체 얻어오기
 		// screenDraw(screenGraphic); // 스크린 그래픽에 어떠한 그림을 그려준다.
 //		if(!check)
-		 //g.drawImage(GameBackgroundImage,0,0,null);
+		// g.drawImage(GameBackgroundImage,0,0,null);
 //		 if(!check)
-		 paintComponents(g);
-	
-		
-	
+		paintComponents(g);
+
 //		repaint();
 
 	}
@@ -459,19 +454,18 @@ public class JavaGameClientView extends JFrame {
 							// gc2.setColor(panel.getBackground()); // 지우개
 							// gc2.setColor(Color.RED);
 							break;
-							
-					
+
 						default:
 							break;
 						}
-						
+
 						break;
 					case "700":
 						String[] datas = cm.data.split(":");
 						lobyInfototal.setText(datas[0]);
 						String members = "";
-						for(int i = 0; i<Integer.parseInt(datas[0]); i++)
-							members = members + datas[i+1] + "  ";
+						for (int i = 0; i < Integer.parseInt(datas[0]); i++)
+							members = members + datas[i + 1] + "  ";
 						lobyInfo.setText(members);
 						break;
 					case "800":
@@ -792,7 +786,7 @@ public class JavaGameClientView extends JFrame {
 			}
 		}
 	}
-	
+
 	public void SendInfoReq(String msg) {
 		try {
 			// dos.writeUTF(msg);
