@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
@@ -19,9 +21,13 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -61,6 +67,7 @@ public class JavaGameServer extends JFrame {
 	 * Create the frame.
 	 */
 	public JavaGameServer() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 338, 440);
 		contentPane = new JPanel();
@@ -124,6 +131,8 @@ public class JavaGameServer extends JFrame {
 					// User 당 하나씩 Thread 생성
 					UserService new_user = new UserService(client_socket);
 					UserVec.add(new_user); // 새로운 참가자 배열에 추가
+
+					
 					new_user.start(); // 만든 객체의 스레드 실행
 					AppendText("현재 참가자 수 " + UserVec.size());
 				} catch (IOException e) {
@@ -280,6 +289,68 @@ public class JavaGameServer extends JFrame {
 				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
 			}
 		}
+		
+		public void WriteInfo(String msg) {
+			try {
+				// dos.writeUTF(msg);
+//				byte[] bb;
+//				bb = MakePacket(msg);
+//				dos.write(bb, 0, bb.length);
+				ChatMsg obcm = new ChatMsg("SERVER", "700", msg);
+				oos.writeObject(obcm);
+			} catch (IOException e) {
+				AppendText("dos.writeObject() error");
+				try {
+//					dos.close();
+//					dis.close();
+					ois.close();
+					oos.close();
+					client_socket.close();
+					client_socket = null;
+					ois = null;
+					oos = null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
+			}
+		}
+		
+		public void WriteInfoRefresh(String msg) {
+			try {
+				// dos.writeUTF(msg);
+//				byte[] bb;
+//				bb = MakePacket(msg);
+//				dos.write(bb, 0, bb.length);
+				ChatMsg obcm = new ChatMsg("SERVER", "800", msg);
+				oos.writeObject(obcm);
+			} catch (IOException e) {
+				AppendText("dos.writeObject() error");
+				try {
+//					dos.close();
+//					dis.close();
+					ois.close();
+					oos.close();
+					client_socket.close();
+					client_socket = null;
+					ois = null;
+					oos = null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
+			}
+		}
+		
+		public void WriteAllRefresh(String str) {
+			for (int i = 0; i < user_vc.size(); i++) {
+				UserService user = (UserService) user_vc.elementAt(i);
+				if (user.UserStatus == "O")
+					user.WriteInfoRefresh(str);
+			}
+		}
 
 		// 귓속말 전송
 		public void WritePrivate(String msg) {
@@ -366,6 +437,7 @@ public class JavaGameServer extends JFrame {
 						UserName = cm.UserName;
 						UserStatus = "O"; // Online 상태
 						Login();
+						WriteAllRefresh("asd");
 					} else if (cm.code.matches("200")) {
 						msg = String.format("[%s] %s", cm.UserName, cm.data);
 						AppendText(msg); // server 화면에 출력
@@ -374,6 +446,7 @@ public class JavaGameServer extends JFrame {
 							UserStatus = "O";
 						} else if (args[1].matches("/exit")) {
 							Logout();
+							WriteAllRefresh("asd");
 							break;
 						} else if (args[1].matches("/list")) {
 							WriteOne("User list\n");
@@ -384,7 +457,7 @@ public class JavaGameServer extends JFrame {
 								WriteOne(user.UserName + "\t" + user.UserStatus + "\n");
 							}
 							WriteOne("-----------------------------\n");
-						} else if (args[1].matches("/sleep")) {
+						}  else if (args[1].matches("/sleep")) {
 							UserStatus = "S";
 						} else if (args[1].matches("/wakeup")) {
 							UserStatus = "O";
@@ -411,7 +484,26 @@ public class JavaGameServer extends JFrame {
 						}
 					} else if (cm.code.matches("400")) { // logout message 처리
 						Logout();
+						WriteAllRefresh("asd");
 						break;
+					} else if (cm.code.matches("700")){
+						msg = String.format("[%s] %s", cm.UserName, cm.data);
+						AppendText(msg); // server 화면에 출력
+						String[] args = msg.split(" "); // 단어들을 분리한다.
+						if (args[1].matches("/lc")){
+							String size = String.valueOf(user_vc.size());
+							String members = "";
+							for (int i = 0; i < user_vc.size(); i++) {
+								UserService user = (UserService) user_vc.elementAt(i);
+								members+=user.UserName;
+								members+=":";
+							}
+							WriteInfo(size + ":" + members);
+//							for (int i = 0; i < user_vc.size(); i++) {
+//								UserService user = (UserService) user_vc.elementAt(i);
+//								WriteInfo(user.UserName + "\t" + user.UserStatus + "\n");
+//							}
+						}
 					} else { // 300, 500, ... 기타 object는 모두 방송한다.
 						WriteAllObject(cm);
 					} 
