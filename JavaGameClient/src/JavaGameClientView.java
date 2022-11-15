@@ -73,6 +73,7 @@ public class JavaGameClientView extends JFrame {
 	private JButton imgBtn;
 
 	JPanel panel;
+	private JLabel backgroundImage;  // 배경에 쓸 이미지 넣어놓는 용도
 	private JLabel lblMouseEvent;
 	private Graphics gc;
 	private int pen_size = 2; // minimum 2
@@ -90,7 +91,9 @@ public class JavaGameClientView extends JFrame {
 	private Graphics screenGraphic;
 
 	// 게임 배경이미지 담기
-	private Image GameBackgroundImage = new ImageIcon("src/images/InGameve2.png").getImage();
+	private ImageIcon GameBackgroundImage = new ImageIcon("src/images/InGameve2.png");
+	
+	
 
 	// 버튼 이미지 아이콘만들기
 	private ImageIcon quitButtonBasicImage = new ImageIcon("src/images/exit.png");
@@ -103,7 +106,22 @@ public class JavaGameClientView extends JFrame {
 	public JLabel lobyInfototal = new JLabel();
 	public JLabel lobyInfo = new JLabel();
 	public JButton Room[] = new JButton[4];
-
+	
+	public int i;
+	int j;
+	int a;
+	public int WhereIAm=0;
+	
+	
+	//게임창 컴포넌트 들 
+	public JButton btnNewButton2 = new JButton("레드"); // 레드 버튼
+	public JButton btnNewButton3 = new JButton("지우개");  // 지우개 버튼
+	public JButton btnNewButton4 = new JButton("초기화"); // 초기화 버튼
+	public JLabel Roomnum = new JLabel(); // 방 번호
+	public JLabel Roompeople = new JLabel();
+	public JLabel RooInfo = new JLabel(); //방 번호 옆에 쓸 "방 번호"	
+	public JLabel Userlist = new JLabel(); // 유저 목록 옆에 쓸 "유저 목록"
+	public JLabel UserlistCountInfo = new JLabel(); // 유저 목록 옆에 쓸 "총 인원"
 	/**
 	 * Create the frame.
 	 * 
@@ -111,14 +129,26 @@ public class JavaGameClientView extends JFrame {
 	 */
 	// 게임 창 ----------------------------------------------------------
 	public JavaGameClientView(String username, String ip_addr, String port_no) {
-
+		
 		setUndecorated(true); // 위에 창을 없애준
 		setTitle("Catch Mind");
 		setSize(1280, 720); // 게임 화면 크기
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼 누르면 꺼지게
-		setResizable(false); // 사이즈 조절 안되게
+		//setResizable(false); // 사이즈 조절 안되게
 		setLayout(null);
+		setVisible(true);
+		
+		
+		backgroundImage = new JLabel();
+		backgroundImage.setIcon(GameBackgroundImage);
+		//backgroundImage.setBorder(new LineBorder(new Color(0, 0, 0)));
+		//backgroundImage.setBackground(Color.WHITE);
+		backgroundImage.setBounds(0, 0, 1280, 720);
+		// contentPane.add(panel);
+		backgroundImage.setVisible(false);
+		add(backgroundImage);
+		
 		// GameBackgroundImage = new
 		// ImageIcon(Main.class.getResource("src/icon1.jpg")).getImage();
 		// setBounds(100, 100, 1280, 720); // 전체 화면 크기
@@ -128,31 +158,103 @@ public class JavaGameClientView extends JFrame {
 		// contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// setContentPane(contentPane);
 		// contentPane.setLayout(null);
-
+		//메뉴바 만들기 
+		//private ImageIcon quitButtonBasicImage = new ImageIcon("src/images/Room"+Integer.toString(i+1)+".png");
 		// lobby
-////////////LobyButton From Here
+////////////웨이팅 룸 시작
+		
+		for( j=0;j<4;j++) {
+			Room[j] = new JButton(new ImageIcon("src/images/Room"+Integer.toString(j+1)+".png"));
+			Room[j].setVisible(true);
+			Room[j].setBorderPainted(false);
+			Room[j].setContentAreaFilled(false);
+			Room[j].setFocusPainted(false);
+			Room[j].addActionListener(new ActionListener() {
+				int temp = j+1;
+			
+				public void actionPerformed(ActionEvent arg0) {	
+					
+					goGame();
+					//Roomnum.setText(Integer.toString(WhereIAm)); 방번호 
+					//pw.println("quit:" + WhereIAm);
+					//pw.println("join:" + Integer.toString(temp) + ":" + nickname);
+					WhereIAm = temp;
+					Roomnum.setText(Integer.toString(WhereIAm));
+				
+					//drawing board show
+					//iDrawing=createImage(550,490);
+					//gDrawing=iDrawing.getGraphics();
+					//gDrawing.setColor(Color.WHITE);
+					//gDrawing.fillRect(0, 0, 550, 490);
+					//repaint();
+					
+				}
+			});
+			add(Room[j]);
+		}
+		Room[0].setBounds(110,250,300,150);
+		Room[1].setBounds(450,250,300,150);
+		Room[2].setBounds(110,440,300,150);
+		Room[3].setBounds(450,440,300,150);
+		
+		
+		
+		// 방 번호 옆에 쓸  "방 번호 " 
+		 RooInfo.setVisible(false);
+		 RooInfo.setBounds(30,10,100,40);
+		 RooInfo.setText("방번호");
+		 RooInfo.setFont(new Font("굴림체",Font.BOLD,30));
+		 RooInfo.setForeground(Color.black);
+		 add(RooInfo);
+		 
+		
+		 // "방 번호" 옆에 쓸 숫자 방 번호 int
+		 
+		 Roomnum.setVisible(false);
+		 Roomnum.setBounds(200,10,100,40);
+		 Roomnum.setText("?");
+		 Roomnum.setFont(new Font("굴림체",Font.BOLD,30));
+		 Roomnum.setForeground(Color.black);
+		 add(Roomnum);
+		/// 유저 목록 
+		 Userlist.setVisible(false);
+		 Userlist.setBounds(30,100,100,40);
+		 Userlist.setText("유저 목록");
+		 Userlist.setFont(new Font("굴림체",Font.BOLD,20));
+		 Userlist.setForeground(Color.black);
+		 add(Userlist); 
+		 //"총 인원"
+		 UserlistCountInfo.setVisible(false);
+		 UserlistCountInfo.setBounds(30,20,100,100);
+		 UserlistCountInfo.setText("현재 방 인원");
+		 UserlistCountInfo.setFont(new Font("굴림체",Font.BOLD,15));
+		 UserlistCountInfo.setForeground(Color.black);
+		 add(UserlistCountInfo); 
+		 // 총 인원 수 int
+
+			lobyInfototal.setVisible(false);
+			lobyInfototal.setText("?");
+			lobyInfototal.setBounds(150, 50, 100, 30);
+			lobyInfototal.setFont(new Font("굴림체", Font.BOLD, 15));
+			lobyInfototal.setForeground(Color.BLACK);
+			this.add(lobyInfototal);
+		
 		////////////
 		////////////
 		myInfo.setBounds(900, 42, 300, 50);
-		myInfo.setVisible(true);
+		myInfo.setVisible(false);
 		myInfo.setFont(new Font("굴림체", Font.BOLD, 40));
 		myInfo.setForeground(Color.BLACK);
 		myInfo.setText(username);
 		this.add(myInfo);
 
-		lobyInfo.setVisible(true);
+		lobyInfo.setVisible(false);
 		lobyInfo.setText("?");
-		lobyInfo.setBounds(600, 70, 1000, 30);
+		lobyInfo.setBounds(150, 100, 1000, 30);
 		lobyInfo.setFont(new Font("굴림체", Font.BOLD, 30));
 		lobyInfo.setForeground(Color.BLACK);
 		this.add(lobyInfo);
 
-		lobyInfototal.setVisible(true);
-		lobyInfototal.setText("?");
-		lobyInfototal.setBounds(600, 20, 100, 30);
-		lobyInfototal.setFont(new Font("굴림체", Font.BOLD, 30));
-		lobyInfototal.setForeground(Color.BLACK);
-		this.add(lobyInfototal);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(880, 120, 400, 550); // 채팅창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -194,11 +296,11 @@ public class JavaGameClientView extends JFrame {
 		lblUserName = new JLabel("Name");
 		lblUserName.setBorder(new LineBorder(new Color(0, 0, 0)));
 		// lblUserName.setBackground(Color.WHITE);
-		lblUserName.setFont(new Font("굴림", Font.BOLD, 50));
+		lblUserName.setFont(new Font("굴림", Font.BOLD, 30));
 		lblUserName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblUserName.setBounds(1100, 30, 100, 100);
+		lblUserName.setBounds(1000, 10, 100, 100);
 		// contentPane.add(lblUserName);
-		lblUserName.setVisible(false);
+		lblUserName.setVisible(true);
 		add(lblUserName);
 		setVisible(true);
 
@@ -237,12 +339,12 @@ public class JavaGameClientView extends JFrame {
 			}
 		});
 		// contentPane.add(btnNewButton2);
-		infoButton.setVisible(true);
+		infoButton.setVisible(false);
 		add(infoButton);
 		// -----------------------색깔 바꾸기 버튼
 
 		//// 색깔 바꾸기 버튼
-		JButton btnNewButton2 = new JButton("레드");
+		
 		btnNewButton2.setFont(new Font("굴림", Font.PLAIN, 8));
 		btnNewButton2.setBounds(25, 639, 50, 50);
 		btnNewButton2.addActionListener(new ActionListener() {
@@ -255,12 +357,12 @@ public class JavaGameClientView extends JFrame {
 			}
 		});
 		// contentPane.add(btnNewButton2);
-		btnNewButton2.setVisible(true);
+		btnNewButton2.setVisible(false);
 		add(btnNewButton2);
 		// -----------------------색깔 바꾸기 버튼
 
 		//// 색깔 바꾸기 버튼
-		JButton btnNewButton3 = new JButton("지우개");
+		
 		btnNewButton3.setFont(new Font("굴림", Font.PLAIN, 7));
 		btnNewButton3.setBounds(90, 639, 50, 50);
 		btnNewButton3.addActionListener(new ActionListener() {
@@ -273,12 +375,13 @@ public class JavaGameClientView extends JFrame {
 			}
 		});
 		// contentPane.add(btnNewButton3);
-		btnNewButton3.setVisible(true);
+		btnNewButton3.setVisible(false);
 		add(btnNewButton3);
 		// -----------------------색깔 바꾸기 버튼
 
-		//// 색깔 바꾸기 버튼
-		JButton btnNewButton4 = new JButton("초기화");
+		//// 색깔 바꾸기 버튼 
+		// 초기화 버튼
+		
 		btnNewButton4.setFont(new Font("굴림", Font.PLAIN, 7));
 		btnNewButton4.setBounds(150, 639, 50, 50);
 
@@ -293,6 +396,7 @@ public class JavaGameClientView extends JFrame {
 		});
 		// contentPane.add(btnNewButton4);
 		// btnNewButton4.setVisible(true);
+		btnNewButton4.setVisible(false);
 		add(btnNewButton4);
 		// -----------------------색깔 바꾸기 버튼 끝
 
@@ -301,7 +405,7 @@ public class JavaGameClientView extends JFrame {
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(25, 146, 550, 490);
 		// contentPane.add(panel);
-		// panel.setVisible(false);
+		 panel.setVisible(false);
 		add(panel);
 		gc = panel.getGraphics();
 
@@ -319,6 +423,7 @@ public class JavaGameClientView extends JFrame {
 		lblMouseEvent.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblMouseEvent.setBackground(Color.WHITE);
 		lblMouseEvent.setBounds(376, 539, 400, 40); ////// 휠의 위치 알려주는 판 !!!!!!!!
+		lblMouseEvent.setVisible(false);
 		// contentPane.add(lblMouseEvent);
 		// add(lblMouseEvent);
 
@@ -361,35 +466,71 @@ public class JavaGameClientView extends JFrame {
 	// 게임창 끝
 	// -------------------------------------------------------------------------------------------------------------------------
 
+	//게임 창 으로 들어가기 
+	public void goGame() {
+		
+		for(int i=0;i<4;i++)
+			Room[i].setVisible(false);
+		
+		 panel.setVisible(true); // 게임판 생성 
+		
+		 //지역변수로 하면 여기서 못써서 위에서 전역변수로 생성 하는거네 아....
+		 UserlistCountInfo.setVisible(true);
+		 lobyInfo.setVisible(true);
+		 lobyInfototal.setVisible(true);
+		 Userlist.setVisible(true);
+		 RooInfo.setVisible(true); // 방 번 호 옆에 쓰는 텍스트 
+		 Roomnum.setVisible(true); // 방번호 
+		 btnNewButton2.setVisible(true);
+		 btnNewButton3.setVisible(true);
+		 btnNewButton4.setVisible(true);
+		 backgroundImage.setVisible(false);
+		 
+		
+		
+	}
+	
+	
+	
 	public void refreshInfo() {
 		SendInfoReq("/lc");
 	}
 
-	public void paint(Graphics g) { // gui ,, jframe에서 가장 먼저 그려주는 함수
+	public void paint(Graphics g) { 
+		
+		super.paint(g);
+        //g.drawImage(GameBackgroundImage, 0, 0, 1280,720, null);
+        // Image 영역이 가려졌다 다시 나타날 때 그려준다.
+       // gc.drawImage(panelImage, 0, 0, this);
+		// gui ,, jframe에서 가장 먼저 그려주는 함수
 //		super.paint(g);
 
-//		 paintComponents(g);
+	 //paintComponents(g);
 		// g.drawImage(GameBackgroundImage, 0, 0, null);
 
 		// Image 영역이 가려졌다 다시 나타날 때 그려준다.
-		// screenImage = createImage(1280, 720); // 판생성
-		// screenGraphic = screenImage.getGraphics(); // 판에 그래픽객체 얻어오기
-		// screenDraw(screenGraphic); // 스크린 그래픽에 어떠한 그림을 그려준다.
+		 //screenImage = createImage(1280, 720); // 판생성
+		 //screenGraphic = screenImage.getGraphics(); // 판에 그래픽객체 얻어오기
+		 //screenDraw(screenGraphic); // 스크린 그래픽에 어떠한 그림을 그려준다.
 //		if(!check)
 		// g.drawImage(GameBackgroundImage,0,0,null);
 //		 if(!check)
-		paintComponents(g);
-
-//		repaint();
+		//paintComponents(g);
+		// g.drawImage(GameBackgroundImage, 0, 0, null);
+	
+		 
+		// paintComponents(g);
+		
+		
 
 	}
 
 	public void screenDraw(Graphics g) {
 
 		// paintComponents(g);
-		// g.drawImage(GameBackgroundImage, 0, 0, null);
-		// paintComponents(gc);
-		this.repaint();
+		 //g.drawImage(GameBackgroundImage, 0, 0, null);
+		 //paintComponents(g);
+		//this.repaint();
 	}
 
 	// Server Message를 수신해서 화면에 표시
