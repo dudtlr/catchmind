@@ -270,7 +270,7 @@ public class JavaGameServer extends JFrame {
 //				bb = MakePacket(msg);
 //				dos.write(bb, 0, bb.length);
 				ChatMsg obcm = new ChatMsg("SERVER", "200", msg);
-				oos.writeObject(obcm);
+				oos.writeObject(obcm); //oos통해서 writeobject 함수에 obcm 담아서 뿌린다
 			} catch (IOException e) {
 				AppendText("dos.writeObject() error");
 				try {
@@ -372,6 +372,7 @@ public class JavaGameServer extends JFrame {
 				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
 			}
 		}
+		
 		public void WriteOneObject(Object ob) {
 			try {
 			    oos.writeObject(ob);
@@ -437,7 +438,7 @@ public class JavaGameServer extends JFrame {
 						UserName = cm.UserName;
 						UserStatus = "O"; // Online 상태
 						Login();
-						WriteAllRefresh("asd");
+						WriteAllRefresh("asd"); // 최신화
 					} else if (cm.code.matches("200")) {
 						msg = String.format("[%s] %s", cm.UserName, cm.data);
 						AppendText(msg); // server 화면에 출력
@@ -446,7 +447,7 @@ public class JavaGameServer extends JFrame {
 							UserStatus = "O";
 						} else if (args[1].matches("/exit")) {
 							Logout();
-							WriteAllRefresh("asd");
+							WriteAllRefresh("asd"); // 최신화 
 							break;
 						} else if (args[1].matches("/list")) {
 							WriteOne("User list\n");

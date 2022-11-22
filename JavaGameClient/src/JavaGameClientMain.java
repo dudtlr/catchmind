@@ -49,7 +49,7 @@ public class JavaGameClientMain extends JFrame {
     * Create the frame.
     */
    public JavaGameClientMain() {
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
       setSize(1280, 720); // 게임 화면 크기
        setLocationRelativeTo(null);
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 버튼 누르면 꺼지게

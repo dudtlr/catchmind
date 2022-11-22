@@ -98,7 +98,7 @@ public class JavaGameClientView extends JFrame {
    private ImageIcon quitButtonBasicImage = new ImageIcon("src/images/exit.png");
 
    // 버튼에 이미지 넣기
-   private JButton quitButton = new JButton(quitButtonBasicImage);
+
 
    // 로비 창 선언
    public JLabel myInfo = new JLabel();
@@ -113,6 +113,7 @@ public class JavaGameClientView extends JFrame {
    
    
    //게임창 컴포넌트 들 
+   private JButton quitButton = new JButton(quitButtonBasicImage); // 나가기 버튼 
    public JButton btnNewButton2 = new JButton(""); // 레드 버튼
    public JButton eraser = new JButton("지우개");  // 지우개 버튼
    public JButton trashcan = new JButton("초기화"); // 초기화 버튼
@@ -303,10 +304,10 @@ public class JavaGameClientView extends JFrame {
       
       
       //게임 배경 이미지 
-      GameBackground.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/backgroundgameroom.png")));
-      GameBackground.setBounds(0, 0, 1280, 720);
-      GameBackground.setVisible(true);
-      getContentPane().add(GameBackground);
+      //GameBackground.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/backgroundgameroom.png")));
+      //GameBackground.setBounds(0, 0, 1280, 720);
+     // GameBackground.setVisible(true);
+     // getContentPane().add(GameBackground);
 
 //--- 종료 버튼 ----      
 
@@ -556,6 +557,13 @@ public class JavaGameClientView extends JFrame {
       lblMouseEvent.setVisible(false);
       // contentPane.add(lblMouseEvent);
       // add(lblMouseEvent);
+      
+      //게임 배경 이미지 
+      GameBackground.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/backgroundgameroom.png")));
+      GameBackground.setBounds(0, 0, 1280, 720);
+      GameBackground.setVisible(true);
+      getContentPane().add(GameBackground);
+
 
       try {
          socket = new Socket(ip_addr, Integer.parseInt(port_no));
@@ -615,7 +623,10 @@ public class JavaGameClientView extends JFrame {
        blackPen.setVisible(true);
        
        btnNewButton2.setVisible(true);
+      
        eraser.setVisible(true);
+       eraser.revalidate();
+       eraser.repaint();
        bluePen.setVisible(true);
        yellowPen.setVisible(true);
        trashcan.setVisible(true);
@@ -686,7 +697,7 @@ public class JavaGameClientView extends JFrame {
                String msg = null;
                ChatMsg cm;
                try {
-                  obcm = ois.readObject();
+                  obcm = ois.readObject();  // 서버에서 정보를 읽어온다.
                } catch (ClassNotFoundException e) {
                   // TODO Auto-generated catch block
                   e.printStackTrace();
@@ -774,7 +785,7 @@ public class JavaGameClientView extends JFrame {
       }
    }
 
-   // Mouse Event 수신 처리
+   // Mouse Event 수신 처리 /// 마우스 이벤트 를 서버로 부터 받아와서 수행하는 코드 
    public void DoMouseEvent(ChatMsg cm) {
       Color c;
       if (cm.UserName.matches(UserName)) // 본인 것은 이미 Local 로 그렸다. 수신한 걸 무시함
@@ -786,6 +797,8 @@ public class JavaGameClientView extends JFrame {
       gc.drawImage(panelImage, 0, 0, panel);
    }
 
+   
+   // 내가 이벤트를 하고 서버로 메시지르 보낸다. 
    public void SendMouseEvent(MouseEvent e) {
 
       ChatMsg cm = new ChatMsg(UserName, "500", "MOUSE");
@@ -818,8 +831,8 @@ public class JavaGameClientView extends JFrame {
       @Override
       public void mouseDragged(MouseEvent e) {
          // if(!UserName.equals(author)) return; // 출제자만 그릴 수 있다.
-         if (isFirst && gc2.getColor().equals(Color.WHITE)) {
-            isFirst = false;
+         if ( gc2.getColor().equals(Color.WHITE)) {
+            //isFirst = false;
             gc2.setColor(Color.black);
 
          }
@@ -835,8 +848,8 @@ public class JavaGameClientView extends JFrame {
       @Override
       public void mouseMoved(MouseEvent e) {
          // if(!UserName.equals(author)) return; // 출제자만 그릴 수 있다.
-         if (isFirst && gc2.getColor().equals(Color.WHITE)) {
-            isFirst = false;
+         if (gc2.getColor().equals(Color.WHITE)) {
+           // isFirst = false;
             gc2.setColor(Color.black);
 
          }
@@ -847,8 +860,8 @@ public class JavaGameClientView extends JFrame {
       public void mouseClicked(MouseEvent e) {
          // if(!UserName.equals(author)) return; // 출제자만 그릴 수 있다.
          lblMouseEvent.setText(e.getButton() + " mouseClicked " + e.getX() + "," + e.getY());
-         if (isFirst && gc2.getColor().equals(Color.WHITE)) {
-            isFirst = false;
+         if (gc2.getColor().equals(Color.WHITE)) {
+            //isFirst = false;
             gc2.setColor(Color.black);
 
          }
@@ -862,8 +875,8 @@ public class JavaGameClientView extends JFrame {
       @Override
       public void mouseEntered(MouseEvent e) {
          // if(!UserName.equals(author)) return; // 출제자만 그릴 수 있다.
-         if (isFirst && gc2.getColor().equals(Color.WHITE)) {
-            isFirst = false;
+         if (gc2.getColor().equals(Color.WHITE)) {
+            //isFirst = false;
             gc2.setColor(Color.black);
 
          }
