@@ -12,13 +12,25 @@ class ChatMsg implements Serializable {
 	public ImageIcon img;
 	public MouseEvent mouse_e;
 	public int pen_size; // pen size
+	
+
+	
+	//좌표 값 
 	private int x1, y1, x2, y2; //드래그시 선을 그을 좌표값
+	
+	private String answer; //답 넣을 공간 
+	
+
+	
+
 
 	public ChatMsg(String UserName, String code, String msg) {
 		this.code = code;
 		this.UserName = UserName;
 		this.data = msg;
 	}
+	
+	
 	public void setX1(int x1){	this.x1 = x1;	}
 	public void setY1(int y1){	this.y1 = y1;	}
 	public void setX2(int x2){	this.x2 = x2;	}
@@ -29,5 +41,14 @@ class ChatMsg implements Serializable {
 	public int getY1(){	return y1;	}
 	public int getX2(){	return x2;	}
 	public int getY2(){	return y2;	}
+	
+	public String getAnswer() {
+		return answer;
+	}
+
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 	
 }

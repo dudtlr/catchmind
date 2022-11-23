@@ -243,6 +243,7 @@ public class JavaGameServer extends JFrame {
 					user.WriteOne(str);
 			}
 		}
+		
 
 		// Windows 처럼 message 제외한 나머지 부분은 NULL 로 만들기 위한 함수
 		public byte[] MakePacket(String msg) {
@@ -435,6 +436,7 @@ public class JavaGameServer extends JFrame {
 					} else
 						continue;
 					if (cm.code.matches("100")) {
+						
 						UserName = cm.UserName;
 						UserStatus = "O"; // Online 상태
 						Login();
@@ -505,7 +507,25 @@ public class JavaGameServer extends JFrame {
 //								WriteInfo(user.UserName + "\t" + user.UserStatus + "\n");
 //							}
 						}
-					} else { // 300, 500, ... 기타 object는 모두 방송한다.
+					} 
+					else if (cm.code.matches("900")) { //  퀴즈 전달 버튼을 누른 사람 한테만 == 버튼 방장만 누르게 할 수 있게 한다.			
+						ChatMsg obcm2 = new ChatMsg("퀴즈전달", "900", msg);
+						obcm2.setAnswer(cm.getAnswer());
+						AppendText(cm.getAnswer());
+						oos.writeObject(obcm2);
+						//WriteOneObject(cm);
+						//WriteAllRefresh("asd");
+						//break;
+					} 
+					else if (cm.code.matches("901")) { // 게임 시작 알림			
+						WriteAllObject(cm);
+					} 
+					else if (cm.code.matches("902")) { // 종료 알림			
+						WriteAllObject(cm);
+					} 
+					
+					
+					else { // 300, 500, ... 기타 object는 모두 방송한다.
 						WriteAllObject(cm);
 					} 
 				} catch (IOException e) {
