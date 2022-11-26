@@ -172,6 +172,8 @@ public class JavaGameServer extends JFrame {
 		private Vector user_vc;
 		public String UserName = "";
 		public String UserStatus;
+		
+		
 
 		public UserService(Socket client_socket) {
 			// TODO Auto-generated constructor stub
@@ -209,6 +211,8 @@ public class JavaGameServer extends JFrame {
 			WriteOne(UserName + "님 환영합니다.\n"); // 연결된 사용자에게 정상접속을 알림
 			String msg = "[" + UserName + "]님이 입장 하였습니다.\n";
 			WriteOthers(msg); // 아직 user_vc에 새로 입장한 user는 포함되지 않았다.
+			
+			
 		}
 
 		public void Logout() {
@@ -241,6 +245,38 @@ public class JavaGameServer extends JFrame {
 				UserService user = (UserService) user_vc.elementAt(i);
 				if (user != this && user.UserStatus == "O")
 					user.WriteOne(str);
+			}
+			if(user_vc.size()== 1) {
+				
+				BossInfo("boss");
+				
+			}
+		}
+		public void BossInfo(String msg) {
+			try {
+				// dos.writeUTF(msg);
+//				byte[] bb;
+//				bb = MakePacket(msg);
+//				dos.write(bb, 0, bb.length);
+				ChatMsg obcm = new ChatMsg(UserName, "904", msg);
+				obcm.setBoss(true);
+				oos.writeObject(obcm);
+			} catch (IOException e) {
+				AppendText("dos.writeObject() error");
+				try {
+//					dos.close();
+//					dis.close();
+					ois.close();
+					oos.close();
+					client_socket.close();
+					client_socket = null;
+					ois = null;
+					oos = null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
 			}
 		}
 		
@@ -512,7 +548,8 @@ public class JavaGameServer extends JFrame {
 						ChatMsg obcm2 = new ChatMsg("퀴즈전달", "900", msg);
 						obcm2.setAnswer(cm.getAnswer());
 						AppendText(cm.getAnswer());
-						oos.writeObject(obcm2);
+						//oos.writeObject(obcm2);
+						WriteAllObject(obcm2);
 						//WriteOneObject(cm);
 						//WriteAllRefresh("asd");
 						//break;
@@ -521,6 +558,9 @@ public class JavaGameServer extends JFrame {
 						WriteAllObject(cm);
 					} 
 					else if (cm.code.matches("902")) { // 종료 알림			
+						WriteAllObject(cm);
+					} 
+					else if (cm.code.matches("903")) { // 정답 알림 		
 						WriteAllObject(cm);
 					} 
 					

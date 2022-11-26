@@ -52,11 +52,9 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-
 import com.sun.tools.javac.Main;
 
 import java.awt.BasicStroke;
-
 
 public class JavaGameClientView extends JFrame {
 	/**
@@ -86,7 +84,7 @@ public class JavaGameClientView extends JFrame {
 	private FileDialog fd;
 	private JButton imgBtn;
 
-	JPanel panel;
+	private JPanel panel;// 원래 퍼블릭이였음
 	private JLabel backgroundImage; // 배경에 쓸 이미지 넣어놓는 용도
 
 	private Graphics gc;
@@ -145,6 +143,7 @@ public class JavaGameClientView extends JFrame {
 	public JLabel Roompeople = new JLabel();
 
 	public JButton StartButton = new JButton(""); // 시작버튼
+	public JButton PassButton = new JButton(""); // 답지 패스 버튼
 
 	// 게임 배경화면
 	private final JLabel GameBackground = new JLabel("New label");
@@ -164,9 +163,11 @@ public class JavaGameClientView extends JFrame {
 	// ********문제 내는 필드 ***********
 	// private boolean boss = false; //true 이면 방장 , false이면 일반
 	private String answer;
-	private JLabel answerView; // 답 보여주는 레이블 
-	private boolean IsGameing = false;// 게임 실행 중 이니>
-	
+	private JLabel answerView; // 답 보여주는 레이블
+	private boolean IsGameing = false;// 게임 실행 중 이니?
+	private boolean boss = false; // 방장인지 아닌지
+	private boolean IsGameStep = false;
+
 	/**
 	 * Create the frame.
 	 * 
@@ -309,11 +310,11 @@ public class JavaGameClientView extends JFrame {
 		myInfo.setText(username);
 		getContentPane().add(myInfo);
 
-		myInfo2.setBounds(50, 600, 100, 50);
+		myInfo2.setBounds(800, 20, 100, 50);
 		myInfo2.setVisible(false);
 		myInfo2.setFont(new Font("휴먼편지체", Font.BOLD, 20));
 		myInfo2.setForeground(Color.BLACK);
-		myInfo2.setText(username);
+		myInfo2.setText("방장");
 		getContentPane().add(myInfo2);
 
 		lobyInfo.setVisible(false);
@@ -384,8 +385,8 @@ public class JavaGameClientView extends JFrame {
 		// getContentPane().add(GameBackground);
 
 		// --게임 시작 버튼
-		
-		StartButton.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/gamestartbutton.png")));
+
+		StartButton.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/startButtonBasic.png")));
 		StartButton.setFont(new Font("휴먼편지체", Font.PLAIN, 8));
 		StartButton.setBounds(750, 380, 200, 200);
 		StartButton.setBorderPainted(false);
@@ -393,22 +394,21 @@ public class JavaGameClientView extends JFrame {
 		StartButton.setFocusPainted(false);
 		StartButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// boss = true;
+				if (boss == true) {
+					answerView.setVisible(true);
+					PassButton.setVisible(true);
+				}
+				quitButton.setEnabled(false);
 				
 				// 게임시작
 				ChatMsg cm2 = new ChatMsg(UserName, "901", "게임을 시작하겠습니다!!!");
 				SendObject(cm2);
-				
-				
+
 				ChatMsg cm = new ChatMsg(UserName, "900", "퀴즈출제");
-				
+
 				cm.setAnswer(quiz());
 				SendObject(cm);
-//				if (cm.setAnswer(quiz()).matches("문제 없음")) {
-//					
-//				}
-				
-				
+				StartButton.setEnabled(false);
 
 			}
 		});
@@ -417,6 +417,35 @@ public class JavaGameClientView extends JFrame {
 		getContentPane().add(StartButton);
 
 		// -- 게임 시작버튼
+		// ----------답 패스 버튼
+
+		PassButton.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/startButtonBasic.png")));
+		PassButton.setFont(new Font("휴먼편지체", Font.PLAIN, 8));
+		PassButton.setBounds(750, 180, 200, 200);
+		PassButton.setBorderPainted(false);
+		PassButton.setContentAreaFilled(false);
+		PassButton.setFocusPainted(false);
+		PassButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (boss == true) {
+					answerView.setVisible(true);
+				}
+				// 게임시작
+				ChatMsg cm2 = new ChatMsg(UserName, "901", "게임을 시작하겠습니다!!!");
+				SendObject(cm2);
+
+				ChatMsg cm = new ChatMsg(UserName, "900", "퀴즈출제");
+
+				cm.setAnswer(quiz());
+				SendObject(cm);
+
+			}
+		});
+		// contentPane.add(btnNewButton2);
+		PassButton.setVisible(false);
+		getContentPane().add(PassButton);
+
+		// ----------답 패스 버튼
 //--- 종료 버튼 ----      
 
 		quitButton.setBounds(1205, 20, 64, 64);
@@ -664,9 +693,9 @@ public class JavaGameClientView extends JFrame {
 		getContentPane().add(triangle);
 
 		// -----------------------색깔 바꾸기 버튼 끝
-		
-		//-----------------------답 보여주는 메모지 창 ---
-		answerView = new JLabel("Name");
+
+		// -----------------------답 보여주는 메모지 창 ---
+		answerView = new JLabel("문제창");
 		answerView.setBorder(new LineBorder(new Color(0, 0, 0)));
 		// lblUserName.setBackground(Color.WHITE);
 		answerView.setFont(new Font("휴먼편지체", Font.BOLD, 30));
@@ -675,16 +704,11 @@ public class JavaGameClientView extends JFrame {
 		// contentPane.add(lblUserName);
 		answerView.setVisible(false);
 		getContentPane().add(answerView);
-		
-		//setVisible(false);
-		//
-	
-	
-	
 
-	
-		
-		//-----------------------답 보여주는 메모지 창 ---
+		// setVisible(false);
+		//
+
+		// -----------------------답 보여주는 메모지 창 ---
 
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
@@ -757,19 +781,25 @@ public class JavaGameClientView extends JFrame {
 
 		if (quiz.size() != 0) {
 			answer = quiz.get(index);
+			System.out.print(answer);
 			return answer;
+
+		} else {
+			ChatMsg msg = new ChatMsg(UserName, "902", "게임 종료!!!!!!");
+			SendObject(msg);
+			PassButton.setEnabled(false);
+			StartButton.setEnabled(true);
+			quitButton.setEnabled(true);
+			return "문제 없음";
 		}
-		else {ChatMsg msg = new ChatMsg(UserName, "902", "게임 종료!!!!!!");
-				SendObject(msg);
-			return "문제 없음";}
-		
-		
+
 	}
 	// --------퀴즈 내는 함수
 
 	// 게임 창 으로 들어가기
 	public void goGame() {
 
+		IsGameStep = true;
 		for (int i = 0; i < 4; i++)
 			Room[i].setVisible(false);
 
@@ -795,8 +825,21 @@ public class JavaGameClientView extends JFrame {
 		circle.setVisible(true);
 		triangle.setVisible(true);
 		greenPen.setVisible(true);
-		StartButton.setVisible(true);
-		answerView.setVisible(true);
+		if (boss == true) {
+			StartButton.setVisible(true);
+			myInfo2.setVisible(true);
+			JOptionPane.showMessageDialog(null, UserName + "님이 방장입니다!!!!");
+		}
+
+		// PassButton.setVisible(true);
+
+//		if(boss == true && IsGameing == true ) {
+//			
+//			System.out.print("하우링ㄴㄹㅇㄴ");
+//			PassButton.setVisible(true);
+//			answerView.setVisible(true);
+//		}
+//		
 
 		// myInfo2.setVisible(true);
 
@@ -938,21 +981,37 @@ public class JavaGameClientView extends JFrame {
 						refreshInfo();
 					case "900":
 						answer = cm.getAnswer();
-						quiz.remove(answer);			
+						quiz.remove(answer);
 						answerView.setText(cm.getAnswer());
 						break;
-					case "901":
-						//만약 게임이 실행중이지 않다면 
-						if(IsGameing == false) {
-						 JOptionPane.showMessageDialog(null,cm.data);}//게임시작 진행 알림
+					case "901": // 게임 시작 알림 창
+						// 만약 게임이 실행중이지 않다면
+						if (IsGameing == false) {
+							JOptionPane.showMessageDialog(null, cm.data);
+						} // 게임시작 진행 알림
 						IsGameing = true; // 모두의 게임 진행상황 true 로 바꾸기
+
 						break;
-						
-					case "902":
-						//게임 종료!
-						if(IsGameing== true) {
-						JOptionPane.showMessageDialog(null,cm.data);}//게임종료
+
+					case "902": // 게임 종료 알림창
+						// 게임 종료!
+						if (IsGameing == true) {
+							JOptionPane.showMessageDialog(null, cm.data);
+						} // 게임종료
 						IsGameing = false; // 모두의 게임 진행상황 true 로 바꾸기
+						break;
+
+					case "903": // 정답 알림창
+						// 게임 종료!
+						JOptionPane.showMessageDialog(null, cm.UserName + "님이 정답을 맞추셨습니다!!!!" + "정답:" + cm.data);
+
+						break;
+					case "904": // 정답 알림창
+						// 게임 종료!
+
+						// JOptionPane.showMessageDialog(null,UserName+"님이 방장입니다!!!!");
+						boss = cm.getBoss();
+
 						break;
 					} // ----------cm.code의 끝
 
@@ -997,10 +1056,12 @@ public class JavaGameClientView extends JFrame {
 	// 내가 이벤트를 하고 서버로 메시지르 보낸다.
 	public void SendMouseEvent(MouseEvent e) {
 
-		ChatMsg cm = new ChatMsg(UserName, "500", "MOUSE");
-		cm.mouse_e = e;
-		cm.pen_size = pen_size;
-		SendObject(cm); // 이벤트를 보낸다. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if (boss && IsGameing) {
+			ChatMsg cm = new ChatMsg(UserName, "500", "MOUSE");
+			cm.mouse_e = e;
+			cm.pen_size = pen_size;
+			SendObject(cm); // 이벤트를 보낸다. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		}
 	}
 
 //	public void SendMouseEvent2(MouseEvent e) {
@@ -1019,15 +1080,17 @@ public class JavaGameClientView extends JFrame {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 
-			// TODO Auto-generated method stub
-			if (e.getWheelRotation() < 0) { // 위로 올리는 경우 pen_size 증가
-				if (pen_size < 20)
-					pen_size++;
-			} else {
-				if (pen_size > 2)
-					pen_size--;
-			}
+			if (boss && IsGameing) {
+				// TODO Auto-generated method stub
+				if (e.getWheelRotation() < 0) { // 위로 올리는 경우 pen_size 증가
+					if (pen_size < 20)
+						pen_size++;
+				} else {
+					if (pen_size > 2)
+						pen_size--;
+				}
 
+			}
 		}
 
 	}
@@ -1055,20 +1118,22 @@ public class JavaGameClientView extends JFrame {
 //			x1 = e.getX();
 //			y1 = e.getY();
 //			gc2.drawLine(x, y, x1, y1);
-			x2 = e.getX();
-			y2 = e.getY();
-			ChatMsg cm = new ChatMsg(UserName, "500", "MOUSE");
+			if (boss && IsGameing) {
+				x2 = e.getX();
+				y2 = e.getY();
+				ChatMsg cm = new ChatMsg(UserName, "500", "MOUSE");
 
-			cm.setX1(z1); // 아주 짧은 선을 그릴 첫 좌표 두개
-			cm.setY1(z2);
-			cm.setX2(x2); // 아주 짧은 선을 그릴 두번째 좌표 두개
-			cm.setY2(y2);
-			cm.pen_size = pen_size;
+				cm.setX1(z1); // 아주 짧은 선을 그릴 첫 좌표 두개
+				cm.setY1(z2);
+				cm.setX2(x2); // 아주 짧은 선을 그릴 두번째 좌표 두개
+				cm.setY2(y2);
+				cm.pen_size = pen_size;
 
-			SendObject(cm);
-			// writer.flush();
-			z1 = e.getX();
-			z2 = e.getY();
+				SendObject(cm);
+				// writer.flush();
+				z1 = e.getX();
+				z2 = e.getY();
+			}
 
 			// panelImnage는 paint()에서 이용한다.
 
@@ -1166,11 +1231,25 @@ public class JavaGameClientView extends JFrame {
 			// Send button을 누르거나 메시지 입력하고 Enter key 치면
 			if (e.getSource() == btnSend || e.getSource() == txtInput) {
 				String msg = null;
+				String msg2 = null;
 				// msg = String.format("[%s] %s\n", UserName, txtInput.getText());
 				msg = txtInput.getText();
-				SendMessage(msg);
-				txtInput.setText(""); // 메세지를 보내고 나면 메세지 쓰는창을 비운다.
-				txtInput.requestFocus(); // 메세지를 보내고 커서를 다시 텍스트 필드로 위치시킨다
+				msg2 = msg;
+
+				if (boss == false) {
+					SendMessage(msg);
+
+					txtInput.setText(""); // 메세지를 보내고 나면 메세지 쓰는창을 비운다.
+					txtInput.requestFocus(); // 메세지를 보내고 커서를 다시 텍스트 필드로 위치시킨다
+					if (IsGameing) {
+						if (answer.equals(msg2)) {
+							ChatMsg obcm = new ChatMsg(UserName, "903", msg2);
+							SendObject(obcm);
+
+						}
+					}
+				}
+
 				if (msg.contains("/exit")) // 종료 처리
 					System.exit(0);
 			}
@@ -1337,6 +1416,7 @@ public class JavaGameClientView extends JFrame {
 //         byte[] bb;
 //         bb = MakePacket(msg);
 //         dos.write(bb, 0, bb.length);
+
 			ChatMsg obcm = new ChatMsg(UserName, "200", msg);
 			oos.writeObject(obcm);
 		} catch (IOException e) {

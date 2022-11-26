@@ -113,6 +113,7 @@ public class JavaGameClientMain extends JFrame {
       
       lblNewLabel_3 = new JLabel("New label");
       lblNewLabel_3.setIcon(new ImageIcon(JavaGameClientMain.class.getResource("images/backgroundimage.png")));
+      //lblNewLabel_3.setIcon(new ImageIcon(JavaGameClientMain.class.getResource("images/h2.jpg")));
       lblNewLabel_3.setBounds(0, 0, 1280, 720);
       contentPane.add(lblNewLabel_3);
       Myaction action = new Myaction();
