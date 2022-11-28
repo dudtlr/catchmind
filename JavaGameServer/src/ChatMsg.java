@@ -19,7 +19,7 @@ class ChatMsg implements Serializable {
 	private int x1, y1, x2, y2; //드래그시 선을 그을 좌표값
 	
 	private String answer; //답 넣을 공간 
-	private boolean boss; // 방장인지 아닌 지
+	private boolean boss; // 방장인지 아닌 지 
 	
 
 	
@@ -33,6 +33,9 @@ class ChatMsg implements Serializable {
 	public void setBoss(boolean boss) {
 		this.boss = boss;
 	}
+	
+
+	
 
 
 	public ChatMsg(String UserName, String code, String msg) {
