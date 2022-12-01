@@ -172,6 +172,8 @@ public class JavaGameClientView extends JFrame {
 	private boolean IsLine = false;
 	private boolean IsRect = false;
 	private boolean IsCircle = false;
+	
+	private int RoomNumber; //게임 방번호
 
 	/**
 	 * Create the frame.
@@ -263,30 +265,78 @@ public class JavaGameClientView extends JFrame {
 			Room[j].setBorderPainted(false);
 			Room[j].setContentAreaFilled(false);
 			Room[j].setFocusPainted(false);
-			Room[j].addActionListener(new ActionListener() {
-				int temp = j + 1;
-
-				public void actionPerformed(ActionEvent arg0) {
-					myInfo.setVisible(false);
-
-					goGame();
-					// Roomnum.setText(Integer.toString(WhereIAm)); 방번호
-					// pw.println("quit:" + WhereIAm);
-					// pw.println("join:" + Integer.toString(temp) + ":" + nickname);
-					WhereIAm = temp;
-					Roomnum.setText(Integer.toString(WhereIAm));
-
-					// drawing board show
-					// iDrawing=createImage(550,490);
-					// gDrawing=iDrawing.getGraphics();
-					// gDrawing.setColor(Color.WHITE);
-					// gDrawing.fillRect(0, 0, 550, 490);
-					// repaint();
-
-				}
-			});
 			getContentPane().add(Room[j]);
 		}
+		Room[0].addActionListener(new ActionListener() {
+			
+
+			public void actionPerformed(ActionEvent arg0) {
+				ChatMsg cm = new ChatMsg(UserName, "1000", "1");
+				cm.setRoomNumber(1);
+				SendObject(cm);
+				
+				myInfo.setVisible(false);
+
+				goGame();
+			
+				Roomnum.setText(Integer.toString(1));
+
+				
+
+			}
+		});
+		Room[1].addActionListener(new ActionListener() {
+			
+
+			public void actionPerformed(ActionEvent arg0) {
+				ChatMsg cm = new ChatMsg(UserName, "1000", "2");
+				cm.setRoomNumber(2);
+				SendObject(cm);
+				
+				myInfo.setVisible(false);
+
+				goGame();
+				
+				
+				Roomnum.setText(Integer.toString(2));
+
+			
+
+			}
+		});Room[2].addActionListener(new ActionListener() {
+		
+			public void actionPerformed(ActionEvent arg0) {
+				ChatMsg cm = new ChatMsg(UserName, "1000", "3");
+				cm.setRoomNumber(3);
+				SendObject(cm);
+				myInfo.setVisible(false);
+
+				goGame();
+			
+			
+				Roomnum.setText(Integer.toString(3));
+
+			
+
+			}
+		});
+		Room[3].addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				ChatMsg cm = new ChatMsg(UserName, "1000", "4");
+				cm.setRoomNumber(4);
+				System.out.println("4번방클릭");
+				SendObject(cm);				
+				myInfo.setVisible(false);
+
+				goGame();
+			
+				
+				Roomnum.setText(Integer.toString(4));
+
+				
+			}
+		});
 		Room[0].setBounds(295, 120, 290, 290);
 		Room[1].setBounds(585, 120, 290, 290);
 		Room[2].setBounds(295, 410, 290, 290);
@@ -1351,7 +1401,7 @@ public class JavaGameClientView extends JFrame {
 						JOptionPane.showMessageDialog(null, cm.UserName + "님이 정답을 맞추셨습니다!!!!" + "정답:" + cm.data);
 
 						break;
-					case "904": // 정답 알림창
+					case "904":  //방장으로 만듬
 						// 게임 종료!
 
 						// JOptionPane.showMessageDialog(null,UserName+"님이 방장입니다!!!!");
