@@ -172,8 +172,10 @@ public class JavaGameClientView extends JFrame {
 	private boolean IsLine = false;
 	private boolean IsRect = false;
 	private boolean IsCircle = false;
-	
-	private int RoomNumber; //게임 방번호
+
+	private boolean GamePage = false;
+
+	private int RoomNumber; // 게임 방번호
 
 	/**
 	 * Create the frame.
@@ -268,73 +270,65 @@ public class JavaGameClientView extends JFrame {
 			getContentPane().add(Room[j]);
 		}
 		Room[0].addActionListener(new ActionListener() {
-			
 
 			public void actionPerformed(ActionEvent arg0) {
+
 				ChatMsg cm = new ChatMsg(UserName, "1000", "1");
 				cm.setRoomNumber(1);
 				SendObject(cm);
-				
+
 				myInfo.setVisible(false);
 
-				goGame();
-			
 				Roomnum.setText(Integer.toString(1));
-
-				
+				goGame();
+				// refreshInfo();
 
 			}
 		});
 		Room[1].addActionListener(new ActionListener() {
-			
 
 			public void actionPerformed(ActionEvent arg0) {
+
 				ChatMsg cm = new ChatMsg(UserName, "1000", "2");
 				cm.setRoomNumber(2);
 				SendObject(cm);
-				
+
 				myInfo.setVisible(false);
 
-				goGame();
-				
-				
 				Roomnum.setText(Integer.toString(2));
-
-			
+				goGame();
+				// refreshInfo();
 
 			}
-		});Room[2].addActionListener(new ActionListener() {
-		
+		});
+		Room[2].addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent arg0) {
+
 				ChatMsg cm = new ChatMsg(UserName, "1000", "3");
 				cm.setRoomNumber(3);
 				SendObject(cm);
 				myInfo.setVisible(false);
 
-				goGame();
-			
-			
 				Roomnum.setText(Integer.toString(3));
-
-			
+				goGame();
+				// refreshInfo();
 
 			}
 		});
 		Room[3].addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent arg0) {
+
 				ChatMsg cm = new ChatMsg(UserName, "1000", "4");
 				cm.setRoomNumber(4);
 				System.out.println("4번방클릭");
-				SendObject(cm);				
+				SendObject(cm);
 				myInfo.setVisible(false);
 
-				goGame();
-			
-				
 				Roomnum.setText(Integer.toString(4));
-
-				
+				goGame();
+				// refreshInfo();
 			}
 		});
 		Room[0].setBounds(295, 120, 290, 290);
@@ -584,8 +578,7 @@ public class JavaGameClientView extends JFrame {
 		quitButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				quitButton
-						.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/exit.png")));
+				quitButton.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/exit.png")));
 				quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));//
 				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
 				// false �� ������ �ѹ��� ����ǰ��Ϸ���
@@ -1008,8 +1001,7 @@ public class JavaGameClientView extends JFrame {
 		circle.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				circle
-						.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/circle2.png")));
+				circle.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/circle2.png")));
 				circle.setCursor(new Cursor(Cursor.HAND_CURSOR));//
 				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
 				// false �� ������ �ѹ��� ����ǰ��Ϸ���
@@ -1043,12 +1035,10 @@ public class JavaGameClientView extends JFrame {
 		triangle.setContentAreaFilled(false);
 		triangle.setFocusPainted(false);
 
-		
 		triangle.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				triangle
-						.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/triangle2.png")));
+				triangle.setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/triangle2.png")));
 				triangle.setCursor(new Cursor(Cursor.HAND_CURSOR));//
 				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
 				// false �� ������ �ѹ��� ����ǰ��Ϸ���
@@ -1064,7 +1054,7 @@ public class JavaGameClientView extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
 		});
 		// contentPane.add(btnNewButton4);
@@ -1230,7 +1220,10 @@ public class JavaGameClientView extends JFrame {
 	}
 
 	public void refreshInfo() {
-		SendInfoReq("/lc");
+		if (IsGameStep == true) {
+			SendInfoReq("/lc");
+		}
+
 	}
 
 	public void paint(Graphics g) {
@@ -1364,6 +1357,13 @@ public class JavaGameClientView extends JFrame {
 					case "700":
 						String[] datas = cm.data.split(":");
 						lobyInfototal.setText(datas[0]);
+						if (datas[0].equals("5")) {
+							System.out.print("종료");
+							ChatMsg msg2 = new ChatMsg(UserName, "400", "Bye");
+							SendObject(msg2);
+							System.exit(0);
+							
+						}
 						String members = "";
 						for (int i = 0; i < Integer.parseInt(datas[0]); i++)
 							members = members + datas[i + 1] + "               ";
@@ -1401,9 +1401,9 @@ public class JavaGameClientView extends JFrame {
 						JOptionPane.showMessageDialog(null, cm.UserName + "님이 정답을 맞추셨습니다!!!!" + "정답:" + cm.data);
 
 						break;
-					case "904":  //방장으로 만듬
+					case "904": // 방장으로 만듬
 						// 게임 종료!
-
+						System.out.println("게임클라에서 보스메시지 받음");
 						// JOptionPane.showMessageDialog(null,UserName+"님이 방장입니다!!!!");
 						boss = cm.getBoss();
 

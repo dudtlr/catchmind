@@ -46,10 +46,12 @@ public class JavaGameServer extends JFrame {
 	private Vector UserVec = new Vector(); // 연결된 사용자를 저장할 벡터
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
 	////////////////// 방
-	private GameRoom room1; // 방생성
-	private GameRoom room2; // 방생성
-	private GameRoom room3; // 방생성
-	private GameRoom room4;// 방생성
+	private Vector room1 = new Vector(); // 방생성
+	private Vector room2 = new Vector(); // 방생성
+	private Vector room3 = new Vector(); // 방생성
+	private Vector room4 = new Vector();// 방생성
+
+	//private boolean IsEnterGameRoom = false;  
 
 	///////////////////// 방
 
@@ -137,10 +139,7 @@ public class JavaGameServer extends JFrame {
 					// User 당 하나씩 Thread 생성
 					UserService new_user = new UserService(client_socket);
 					UserVec.add(new_user); // 새로운 참가자 배열에 추가
-					room1 = new GameRoom(1); // 방생성
-					room2 = new GameRoom(2); // 방생성
-					room3 = new GameRoom(3); // 방생성
-					room4 = new GameRoom(4); // 방생성
+
 					new_user.start(); // 만든 객체의 스레드 실행
 					AppendText("현재 참가자 수 " + UserVec.size());
 				} catch (IOException e) {
@@ -199,6 +198,7 @@ public class JavaGameServer extends JFrame {
 	// User 당 생성되는 Thread
 	// Read One 에서 대기 -> Write All
 	public class UserService extends Thread {
+		private boolean IsEnterGameRoom = false;  
 		private InputStream is;
 		private OutputStream os;
 		private DataInputStream dis;
@@ -214,7 +214,7 @@ public class JavaGameServer extends JFrame {
 
 		private GameRoom room; // 유저가 속한 룸
 
-		public int RoomNumber = 5; // 각자 가지고 있는 고유의 방 번호 초기값을 5로 주자 5가 모두의방
+		public int RoomNumber; // 각자 가지고 있는 고유의 방 번호 초기값을 5로 주자 5가 모두의방
 
 		public String RoomNumber2 = String.valueOf(RoomNumber); // 여기에 1 2 3 4 가 들어오는 거임
 
@@ -274,6 +274,7 @@ public class JavaGameServer extends JFrame {
 		public void Logout() {
 			String msg = "[" + UserName + "]님이 퇴장 하였습니다.\n";
 			UserVec.removeElement(this); // Logout한 현재 객체를 벡터에서 지운다
+			user_vc.removeElement(this);
 			WriteAll(msg); // 나를 제외한 다른 User들에게 전송
 			AppendText("사용자 " + "[" + UserName + "] 퇴장. 현재 참가자 수 " + UserVec.size());
 		}
@@ -328,14 +329,14 @@ public class JavaGameServer extends JFrame {
 			// RoomNumber2= String.valueOf(RoomNumber);
 			for (int i = 0; i < user_vc.size(); i++) {
 				UserService user = (UserService) user_vc.elementAt(i);
-				if (user != this && user.UserStatus == "O")
+				if (user != this && user.UserStatus == "O" && user.IsEnterGameRoom == false)
 					user.WriteOne(str);
 			}
-			if (user_vc.size() == 1) {
-
-				BossInfo("boss");
-
-			}
+//			if (user_vc.size() == 1) {
+//
+//				BossInfo("boss");
+//
+//			}
 		}
 
 		public void BossInfo(String msg) {
@@ -347,6 +348,7 @@ public class JavaGameServer extends JFrame {
 				ChatMsg obcm = new ChatMsg(UserName, "904", msg);
 				obcm.setBoss(true);
 				oos.writeObject(obcm);
+				System.out.print("보스 권한 주기");
 			} catch (IOException e) {
 				AppendText("dos.writeObject() error");
 				try {
@@ -561,7 +563,7 @@ public class JavaGameServer extends JFrame {
 						UserStatus = "O"; // Online 상태
 
 						Login();
-						WriteAllRefresh("asd"); // 최신화
+						// WriteAllRefresh("asd"); // 최신화
 					} else if (cm.code.matches("200")) {
 						msg = String.format("[%s] %s", cm.UserName, cm.data);
 						AppendText(msg); // server 화면에 출력
@@ -645,34 +647,88 @@ public class JavaGameServer extends JFrame {
 					} else if (cm.code.matches("903")) { // 정답 알림
 						WriteAllObject(cm);
 					} else if (cm.code.matches("1000")) { // 1번방 입장
-//						switch (cm.data) {
-//						case "1":
-//							this.enterRoom(room1);
-//							room1.enterUser(this);
-//							System.out.print("1번방입장");
-//							break;
-//						case "2":
-//							this.enterRoom(room2);
-//							room2.enterUser(this);
-//							System.out.print("2번방입장");
-//							break;
-//						case "3":
-//							this.enterRoom(room3);
-//							room3.enterUser(this);
-//							System.out.print("3번방입장");
-//							break;
-//						case "4":
-//							this.enterRoom(room4);
-//							room4.enterUser(this);
-//							System.out.print("4번방입장");
-//							break;
-//						default:
-//							
-//							break;
-//
-//						}
-						
-						WriteAllObject(cm);
+						switch (cm.data) {
+						case "1":
+							RoomNumber = cm.getRoomNumber();
+							
+							room1.add(this);
+							user_vc = room1;
+							// room1.add(this);
+
+							System.out.print("1번방입장");
+							IsEnterGameRoom = true;
+							System.out.print(room1.size());
+							if (IsEnterGameRoom && room1.size() < 2) {
+								BossInfo("boss");
+
+							}
+							if (IsEnterGameRoom && room1.size() > 4) {
+								Logout();
+							
+							}
+							
+
+							break;
+						case "2":
+							RoomNumber = cm.getRoomNumber();
+							
+							room2.add(this);
+							user_vc = room2;
+							System.out.print("2번방입장");
+							IsEnterGameRoom = true;
+							System.out.print(room2.size());
+							if (IsEnterGameRoom && room2.size() < 2) {
+								BossInfo("boss");
+							}
+							if (IsEnterGameRoom && room2.size() > 4) {
+								Logout();
+								
+							}
+
+							break;
+						case "3":
+							RoomNumber = cm.getRoomNumber();
+							
+							room3.add(this);
+							user_vc = room3;
+							System.out.print("3번방입장");
+							IsEnterGameRoom = true;
+							System.out.print(room3.size());
+							if (IsEnterGameRoom && room3.size() < 2) {
+								BossInfo("boss");
+							}
+							if (IsEnterGameRoom && room3.size() > 4) {
+								Logout();
+								
+							}
+
+							break;
+						case "4":
+							RoomNumber = cm.getRoomNumber();
+							
+							room4.add(this);
+							user_vc = room4;
+							System.out.print("4번방입장");
+							IsEnterGameRoom = true;
+							System.out.print(room4.size());
+							if (IsEnterGameRoom && room4.size() < 2) {
+								BossInfo("boss");
+								
+							}
+							if (IsEnterGameRoom && room4.size() > 4) {
+								Logout();
+								
+							}
+
+							break;
+						default:
+
+							break;
+
+						}
+
+						WriteAllRefresh("asd"); // 최신화
+						// WriteAllObject(cm);
 					}
 
 					else { // 300, 500, ... 기타 object는 모두 방송한다.
