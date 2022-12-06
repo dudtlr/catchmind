@@ -1512,6 +1512,7 @@ public class JavaGameClientView extends JFrame {
 						} // 게임시작 진행 알림
 						IsGameing = true; // 모두의 게임 진행상황 true 로 바꾸기
 						quitButton.setEnabled(false); // 게임이 시작되면 나가기 버튼 못하게
+						quitButton.setVisible(false);
 
 						break;
 
@@ -1522,6 +1523,7 @@ public class JavaGameClientView extends JFrame {
 						} // 게임종료
 						IsGameing = false; // 모두의 게임 진행상황 true 로 바꾸기
 						quitButton.setEnabled(true);
+						quitButton.setVisible(true);
 						break;
 
 					case "903": // 정답 알림창
