@@ -269,10 +269,25 @@ public class JavaGameClientView extends JFrame {
 			Room[j].setFocusPainted(false);
 			getContentPane().add(Room[j]);
 		}
-		Room[0].addActionListener(new ActionListener() {
+		Room[0].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Room[0].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room1_hover.png")));
+				Room[0].setCursor(new Cursor(Cursor.HAND_CURSOR));//
+				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
+				// false �� ������ �ѹ��� ����ǰ��Ϸ���
+				// buttonEnteredMusic.start();
 
-			public void actionPerformed(ActionEvent arg0) {
+			}
 
+			@Override
+			public void mouseExited(MouseEvent e) {
+				Room[0].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room1.png")));
+				Room[0].setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
 				ChatMsg cm = new ChatMsg(UserName, "1000", "1");
 				cm.setRoomNumber(1);
 				SendObject(cm);
@@ -282,13 +297,28 @@ public class JavaGameClientView extends JFrame {
 				Roomnum.setText(Integer.toString(1));
 				goGame();
 				// refreshInfo();
-
+				
 			}
 		});
-		Room[1].addActionListener(new ActionListener() {
+		Room[1].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Room[1].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room2_hover.png")));
+				Room[1].setCursor(new Cursor(Cursor.HAND_CURSOR));//
+				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
+				// false �� ������ �ѹ��� ����ǰ��Ϸ���
+				// buttonEnteredMusic.start();
 
-			public void actionPerformed(ActionEvent arg0) {
+			}
 
+			@Override
+			public void mouseExited(MouseEvent e) {
+				Room[1].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room2.png")));
+				Room[1].setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
 				ChatMsg cm = new ChatMsg(UserName, "1000", "2");
 				cm.setRoomNumber(2);
 				SendObject(cm);
@@ -298,39 +328,132 @@ public class JavaGameClientView extends JFrame {
 				Roomnum.setText(Integer.toString(2));
 				goGame();
 				// refreshInfo();
-
+				
 			}
 		});
-		Room[2].addActionListener(new ActionListener() {
+		Room[2].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Room[2].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room3_hover.png")));
+				Room[2].setCursor(new Cursor(Cursor.HAND_CURSOR));//
+				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
+				// false �� ������ �ѹ��� ����ǰ��Ϸ���
+				// buttonEnteredMusic.start();
 
-			public void actionPerformed(ActionEvent arg0) {
+			}
 
+			@Override
+			public void mouseExited(MouseEvent e) {
+				Room[2].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room3.png")));
+				Room[2].setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
 				ChatMsg cm = new ChatMsg(UserName, "1000", "3");
 				cm.setRoomNumber(3);
 				SendObject(cm);
+
 				myInfo.setVisible(false);
 
 				Roomnum.setText(Integer.toString(3));
 				goGame();
 				// refreshInfo();
-
 			}
 		});
-		Room[3].addActionListener(new ActionListener() {
+		Room[3].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Room[3].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room4_hover.png")));
+				Room[3].setCursor(new Cursor(Cursor.HAND_CURSOR));//
+				// Music buttonEnteredMusic = new Music ("buttonEnteredMusic.mp3",false);//
+				// false �� ������ �ѹ��� ����ǰ��Ϸ���
+				// buttonEnteredMusic.start();
 
-			public void actionPerformed(ActionEvent arg0) {
+			}
 
+			@Override
+			public void mouseExited(MouseEvent e) {
+				Room[3].setIcon(new ImageIcon(JavaGameClientView.class.getResource("/images/Room4.png")));
+				Room[3].setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
 				ChatMsg cm = new ChatMsg(UserName, "1000", "4");
 				cm.setRoomNumber(4);
-				System.out.println("4번방클릭");
 				SendObject(cm);
+				
 				myInfo.setVisible(false);
 
 				Roomnum.setText(Integer.toString(4));
 				goGame();
 				// refreshInfo();
+				
 			}
 		});
+//		Room[0].addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent arg0) {
+//
+//				ChatMsg cm = new ChatMsg(UserName, "1000", "1");
+//				cm.setRoomNumber(1);
+//				SendObject(cm);
+//
+//				myInfo.setVisible(false);
+//
+//				Roomnum.setText(Integer.toString(1));
+//				goGame();
+//				// refreshInfo();
+//
+//			}
+//		});
+//		Room[1].addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent arg0) {
+//
+//				ChatMsg cm = new ChatMsg(UserName, "1000", "2");
+//				cm.setRoomNumber(2);
+//				SendObject(cm);
+//
+//				myInfo.setVisible(false);
+//
+//				Roomnum.setText(Integer.toString(2));
+//				goGame();
+//				// refreshInfo();
+//
+//			}
+//		});
+//		Room[2].addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent arg0) {
+//
+//				ChatMsg cm = new ChatMsg(UserName, "1000", "3");
+//				cm.setRoomNumber(3);
+//				SendObject(cm);
+//				myInfo.setVisible(false);
+//
+//				Roomnum.setText(Integer.toString(3));
+//				goGame();
+//				// refreshInfo();
+//
+//			}
+//		});
+//		Room[3].addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent arg0) {
+//
+//				ChatMsg cm = new ChatMsg(UserName, "1000", "4");
+//				cm.setRoomNumber(4);
+//				System.out.println("4번방클릭");
+//				SendObject(cm);
+//				myInfo.setVisible(false);
+//
+//				Roomnum.setText(Integer.toString(4));
+//				goGame();
+//				// refreshInfo();
+//			}
+//		});
 		Room[0].setBounds(295, 120, 290, 290);
 		Room[1].setBounds(585, 120, 290, 290);
 		Room[2].setBounds(295, 410, 290, 290);
