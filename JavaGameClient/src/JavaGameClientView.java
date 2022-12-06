@@ -603,6 +603,10 @@ public class JavaGameClientView extends JFrame {
 				SendObject(cm);
 				StartButton.setEnabled(false);
 				StartButton.setVisible(false);
+				
+				BGM bgm = new BGM();
+				
+				
 			}
 		});
 //		StartButton.addActionListener(new ActionListener() {
@@ -1521,8 +1525,10 @@ public class JavaGameClientView extends JFrame {
 
 					case "903": // 정답 알림창
 						// 게임 종료!
+						BGM2 bgm2 = new BGM2();
 						JOptionPane.showMessageDialog(null, cm.UserName + "님이 정답을 맞추셨습니다!!!!" + "정답:" + cm.data);
-
+						
+						
 						break;
 					case "904": // 방장으로 만듬
 						// 게임 종료!
