@@ -605,7 +605,7 @@ public class JavaGameClientView extends JFrame {
 				StartButton.setVisible(false);
 				
 				BGM bgm = new BGM();
-				
+				quitButton.setVisible(false);
 				
 			}
 		});
@@ -1290,6 +1290,7 @@ public class JavaGameClientView extends JFrame {
 			quitButton.setEnabled(true);
 			StartButton.setVisible(true);
 			PassButton.setVisible(false);
+			quitButton.setVisible(true);
 
 			return "문제 없음";
 		}
