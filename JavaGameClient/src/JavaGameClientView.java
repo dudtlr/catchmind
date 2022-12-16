@@ -159,8 +159,8 @@ public class JavaGameClientView extends JFrame {
 	// -------------drawLine에 쓰이는 것들
 
 	// --------문제 내는 필드 -----------
-	ArrayList<String> quiz = new ArrayList<String>(Arrays.asList("사자성어", "딸기", "인어공주", "타이타닉", "올림픽", "다크서클", "세종대왕",
-			"일석이조", "십중팔구", "터미네이터", "오토바이", "요리사", "군인", "야구", "탁구", "박명수", "최기근"));
+	ArrayList<String> quiz = new ArrayList<String>(Arrays.asList("공개수배", "돈다발", "물렁뼈", "브라질너트", "산모", "속셈", "수건",
+			"수학여행", "숙취", "알통", "이발소", "인도양", "장수풍뎅이", "스타킹", "물안개", "소양강"));
 	// ********문제 내는 필드 ***********
 	// private boolean boss = false; //true 이면 방장 , false이면 일반
 	private String answer;
@@ -297,7 +297,7 @@ public class JavaGameClientView extends JFrame {
 				Roomnum.setText(Integer.toString(1));
 				goGame();
 				// refreshInfo();
-				
+
 			}
 		});
 		Room[1].addMouseListener(new MouseAdapter() {
@@ -328,7 +328,7 @@ public class JavaGameClientView extends JFrame {
 				Roomnum.setText(Integer.toString(2));
 				goGame();
 				// refreshInfo();
-				
+
 			}
 		});
 		Room[2].addMouseListener(new MouseAdapter() {
@@ -383,13 +383,13 @@ public class JavaGameClientView extends JFrame {
 				ChatMsg cm = new ChatMsg(UserName, "1000", "4");
 				cm.setRoomNumber(4);
 				SendObject(cm);
-				
+
 				myInfo.setVisible(false);
 
 				Roomnum.setText(Integer.toString(4));
 				goGame();
 				// refreshInfo();
-				
+
 			}
 		});
 //		Room[0].addActionListener(new ActionListener() {
@@ -596,6 +596,10 @@ public class JavaGameClientView extends JFrame {
 				// 게임시작
 				ChatMsg cm2 = new ChatMsg(UserName, "901", "게임을 시작하겠습니다!!!");
 				SendObject(cm2);
+				
+				ChatMsg cm3 = new ChatMsg(UserName, "200", "방장이 게임을 시작하였습니다!!!");
+				SendObject(cm3);
+				
 
 				ChatMsg cm = new ChatMsg(UserName, "900", "퀴즈출제");
 
@@ -603,10 +607,10 @@ public class JavaGameClientView extends JFrame {
 				SendObject(cm);
 				StartButton.setEnabled(false);
 				StartButton.setVisible(false);
-				
+
 				BGM bgm = new BGM();
 				quitButton.setVisible(false);
-				
+
 			}
 		});
 //		StartButton.addActionListener(new ActionListener() {
@@ -1279,7 +1283,83 @@ public class JavaGameClientView extends JFrame {
 		if (quiz.size() != 0) {
 
 			answer = quiz.get(index);
+			ChatMsg obcm10 = new ChatMsg(UserName, "300", "IMG");
+			switch (answer) {
+			case "공개수배":
+				ImageIcon img = new ImageIcon(JavaGameClientView.class.getResource("/images/hint1.png"));
+				obcm10.img = img;
+				break;
+			case "돈다발":
+				ImageIcon img2 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint2.png"));
+				obcm10.img = img2;
+				break;
+			case "물렁뼈":
+				ImageIcon img3 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint3.png"));
+				obcm10.img = img3;
+				break;
+			case "브라질너트":
+				ImageIcon img4 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint4.png"));
+				obcm10.img = img4;
+				break;
+			case "물안개":
+				ImageIcon img5 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint5.png"));
+				obcm10.img = img5;
+				break;
+			case "산모":
+				ImageIcon img6 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint6.png"));
+				obcm10.img = img6;
+				break;
+			case "소양강":
+				ImageIcon img7 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint7.png"));
+				obcm10.img = img7;
+				break;
+			case "속셈":
+				ImageIcon img8 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint8.png"));
+				obcm10.img = img8;
+				break;
+			case "수건":
+				ImageIcon img9 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint9.png"));
+				obcm10.img = img9;
+				break;
+			case "수학여행":
+				ImageIcon img10 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint10.png"));
+				obcm10.img = img10;
+				break;
+			case "숙취":
+				ImageIcon img11 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint11.png"));
+				obcm10.img = img11;
+				break;
+			case "스타킹":
+				ImageIcon img12 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint12.png"));
+				obcm10.img = img12;
+				break;
+			case "알통":
+				ImageIcon img13 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint13.png"));
+				obcm10.img = img13;
+				break;
+			case "이발소":
+				ImageIcon img14 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint14.png"));
+				obcm10.img = img14;
+				break;
+			case "인도양":
+				ImageIcon img15 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint15.png"));
+				obcm10.img = img15;
+				break;
+			case "장수풍뎅이":
+				ImageIcon img16 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint16.png"));
+				obcm10.img = img16;
+				break;
+			case "라디오스타":
+				ImageIcon img17 = new ImageIcon(JavaGameClientView.class.getResource("/images/hint17.png"));
+				obcm10.img = img17;
+				break;
 
+			default:
+				break;
+
+			}
+
+			SendObject(obcm10);
 			return answer;
 
 		} else {
@@ -1291,6 +1371,8 @@ public class JavaGameClientView extends JFrame {
 			StartButton.setVisible(true);
 			PassButton.setVisible(false);
 			quitButton.setVisible(true);
+			ChatMsg cm3 = new ChatMsg(UserName, "200", "게임이 종료되었습니다!!!");
+			SendObject(cm3);
 
 			return "문제 없음";
 		}
@@ -1423,10 +1505,17 @@ public class JavaGameClientView extends JFrame {
 							AppendText(msg);
 						break;
 					case "300": // Image 첨부
+						if(boss == false) {
 						if (cm.UserName.equals(UserName))
-							AppendTextR("[" + cm.UserName + "]");
+							AppendTextR("[" + cm.UserName + "]"+"문제 출제!!!");
 						else
-							AppendText("[" + cm.UserName + "]");
+							AppendText("[" + cm.UserName + "]"+"문제 출제!!!");}
+						if(boss == true) {
+							if (cm.UserName.equals(UserName))
+								AppendTextR("[" + cm.UserName + "]"+"문제 출제");
+							else
+								AppendText("[" + cm.UserName + "]"+"문제 출제");}
+
 						AppendImage(cm.img);
 						break;
 					case "500": // Mouse Event 수신
@@ -1490,7 +1579,7 @@ public class JavaGameClientView extends JFrame {
 							ChatMsg msg2 = new ChatMsg(UserName, "400", "Bye");
 							SendObject(msg2);
 							System.exit(0);
-							
+
 						}
 						String members = "";
 						for (int i = 0; i < Integer.parseInt(datas[0]); i++)
@@ -1530,8 +1619,7 @@ public class JavaGameClientView extends JFrame {
 						// 게임 종료!
 						BGM2 bgm2 = new BGM2();
 						JOptionPane.showMessageDialog(null, cm.UserName + "님이 정답을 맞추셨습니다!!!!" + "정답:" + cm.data);
-						
-						
+
 						break;
 					case "904": // 방장으로 만듬
 						// 게임 종료!
@@ -1890,43 +1978,46 @@ public class JavaGameClientView extends JFrame {
 	}
 
 	public void AppendImage(ImageIcon ori_icon) {
-		int len = textArea.getDocument().getLength();
-		textArea.setCaretPosition(len); // place caret at the end (with no selection)
-		Image ori_img = ori_icon.getImage();
-		Image new_img;
-		ImageIcon new_icon;
-		int width, height;
-		double ratio;
-		width = ori_icon.getIconWidth();
-		height = ori_icon.getIconHeight();
-		// Image가 너무 크면 최대 가로 또는 세로 200 기준으로 축소시킨다.
-		if (width > 200 || height > 200) {
-			if (width > height) { // 가로 사진
-				ratio = (double) height / width;
-				width = 200;
-				height = (int) (width * ratio);
-			} else { // 세로 사진
-				ratio = (double) width / height;
-				height = 200;
-				width = (int) (height * ratio);
+		if (boss == true) {
+			int len = textArea.getDocument().getLength();
+			textArea.setCaretPosition(len); // place caret at the end (with no selection)
+			Image ori_img = ori_icon.getImage();
+			Image new_img;
+			ImageIcon new_icon;
+			int width, height;
+			double ratio;
+			width = ori_icon.getIconWidth();
+			height = ori_icon.getIconHeight();
+			// Image가 너무 크면 최대 가로 또는 세로 200 기준으로 축소시킨다.
+			if (width > 200 || height > 200) {
+				if (width > height) { // 가로 사진
+					ratio = (double) height / width;
+					width = 200;
+					height = (int) (width * ratio);
+				} else { // 세로 사진
+					ratio = (double) width / height;
+					height = 200;
+					width = (int) (height * ratio);
+				}
+				new_img = ori_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+				new_icon = new ImageIcon(new_img);
+				textArea.insertIcon(new_icon);
+			} else {
+				textArea.insertIcon(ori_icon);
+				new_img = ori_img;
 			}
-			new_img = ori_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-			new_icon = new ImageIcon(new_img);
-			textArea.insertIcon(new_icon);
-		} else {
-			textArea.insertIcon(ori_icon);
-			new_img = ori_img;
-		}
-		len = textArea.getDocument().getLength();
-		textArea.setCaretPosition(len);
-		textArea.replaceSelection("\n");
-		// ImageViewAction viewaction = new ImageViewAction();
-		// new_icon.addActionListener(viewaction); // 내부클래스로 액션 리스너를 상속받은 클래스로
-		// panelImage = ori_img.getScaledInstance(panel.getWidth(), panel.getHeight(),
-		// Image.SCALE_DEFAULT);
+			len = textArea.getDocument().getLength();
+			textArea.setCaretPosition(len);
+			textArea.replaceSelection("\n");
+			// ImageViewAction viewaction = new ImageViewAction();
+			// new_icon.addActionListener(viewaction); // 내부클래스로 액션 리스너를 상속받은 클래스로
+			// panelImage = ori_img.getScaledInstance(panel.getWidth(), panel.getHeight(),
+			// Image.SCALE_DEFAULT);
 
-		gc2.drawImage(ori_img, 0, 0, panel.getWidth(), panel.getHeight(), panel);
-		gc.drawImage(panelImage, 0, 0, panel.getWidth(), panel.getHeight(), panel);
+			gc2.drawImage(ori_img, 0, 0, panel.getWidth(), panel.getHeight(), panel);
+			gc.drawImage(panelImage, 0, 0, panel.getWidth(), panel.getHeight(), panel);
+		}
+
 	}
 
 	// Windows 처럼 message 제외한 나머지 부분은 NULL 로 만들기 위한 함수
